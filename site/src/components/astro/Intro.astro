@@ -1,0 +1,139 @@
+---
+import { photos } from "../../data/site";
+const checks = [
+  "Open to every student in grades 9 to 12",
+  "Service hours that count toward Bright Futures",
+  "Real leadership: members run the club",
+];
+---
+
+<section class="intro chapter--paper chapter--edge" id="about" data-stack>
+  <div class="wrap intro-grid">
+    <div class="intro-copy reveal">
+      <span class="eyebrow">Who we are</span>
+      <h2>Small acts, <em>big</em> impact on the 305.</h2>
+      <p class="intro-lead">
+        Key Club is the oldest and largest service program for high school students in
+        the world. At Mater Brickell, it is where students who want to make a difference
+        find each other.
+      </p>
+      <ul class="checks">
+        {checks.map((c) => <li>{c}</li>)}
+      </ul>
+    </div>
+
+    <div class="collage reveal">
+      <figure class="frame f1" data-tilt data-cursor={photos[1].label}>
+        <img src={photos[1].src} alt="Key Club members at a district conference" loading="lazy" />
+        <figcaption>{photos[1].label}</figcaption>
+      </figure>
+      <figure class="frame f2" data-tilt data-cursor={photos[2].label}>
+        <img src={photos[2].src} alt="Key Club members on a service day" loading="lazy" />
+        <figcaption>{photos[2].label}</figcaption>
+      </figure>
+      <span class="stamp" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <defs>
+            <path id="arc" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
+          </defs>
+          <circle cx="60" cy="60" r="58" fill="var(--maroon)" />
+          <text font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="11.5" letter-spacing="2.4" fill="var(--paper)">
+            <textPath href="#arc">SERVE &middot; LEAD &middot; CARE &middot; SERVE &middot; LEAD &middot; CARE &middot;</textPath>
+          </text>
+          <text x="60" y="68" text-anchor="middle" font-family="Be Vietnam Pro, sans-serif" font-weight="800" font-size="30" fill="var(--paper)">KC</text>
+        </svg>
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro { padding-block: clamp(70px, 10vw, 120px); }
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(36px, 6vw, 88px);
+    align-items: center;
+  }
+  .intro-copy h2 {
+    font-size: var(--step-3);
+    line-height: 0.95;
+    margin-top: 16px;
+  }
+  .intro-copy h2 em { font-style: italic; color: var(--maroon); }
+  .intro-lead {
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--ink-soft);
+    max-width: 46ch;
+    margin-top: 22px;
+  }
+  .checks { display: grid; gap: 14px; margin-top: 28px; }
+  .checks li {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 14px;
+    align-items: start;
+    font-weight: 600;
+  }
+  .checks li::before {
+    content: "";
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    background: var(--maroon);
+    clip-path: polygon(14% 44%, 0 58%, 42% 100%, 100% 16%, 86% 2%, 42% 72%);
+  }
+
+  .collage {
+    position: relative;
+    aspect-ratio: 1 / 1.02;
+    perspective: 1000px;
+  }
+  .frame {
+    position: absolute;
+    margin: 0;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 10px 10px 34px;
+    box-shadow: 8px 10px 0 var(--ink);
+    transform-style: preserve-3d;
+    transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  }
+  .frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.2) contrast(1.05);
+  }
+  .frame figcaption {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    font-family: var(--display);
+    font-size: var(--step--2);
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .f1 { inset: 0 34% 32% 0; rotate: -2.4deg; z-index: 1; }
+  .f1 img { aspect-ratio: 4 / 3; }
+  .f2 { inset: 30% 0 0 40%; rotate: 3deg; z-index: 2; }
+  .f2 img { aspect-ratio: 3 / 4; }
+  .stamp {
+    position: absolute;
+    left: 40%;
+    top: -6%;
+    width: clamp(78px, 11vw, 112px);
+    z-index: 3;
+    animation: spin 22s linear infinite;
+  }
+  @keyframes spin { to { rotate: 360deg; } }
+  @media (prefers-reduced-motion: reduce) { .stamp { animation: none; } }
+
+  @media (max-width: 860px) {
+    .intro-grid { grid-template-columns: 1fr; }
+    .collage { max-width: 440px; margin-top: 10px; }
+  }
+</style>

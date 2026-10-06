@@ -1,0 +1,227 @@
+---
+import "../styles/global.css";
+const { title = "Mater Brickell Key Club", description = "The student-led service club at Mater Brickell Academy. Caring is our way of life." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700&family=Assistant:wght@400;500;600;700;800&display=swap"
+    />
+  </head>
+  <body class="grain">
+    <canvas id="dotfield" aria-hidden="true"></canvas>
+    <div id="cur-dot" aria-hidden="true"></div>
+    <slot />
+    <script>
+      import Lenis from "lenis";
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+      import { initStack } from "../motion/stack";
+
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+      const cv = document.getElementById("dotfield") as HTMLCanvasElement;
+      const ctx = cv?.getContext("2d");
+      const pointer = { x: -9999, y: -9999 };
+      let scrollOffset = 0;
+      let W = 0, H = 0, dpr = 1;
+
+      function sizeCanvas() {
+        dpr = Math.min(2, window.devicePixelRatio || 1);
+        W = cv.width = Math.floor(window.innerWidth * dpr);
+        H = cv.height = Math.floor(window.innerHeight * dpr);
+        cv.style.width = window.innerWidth + "px";
+        cv.style.height = window.innerHeight + "px";
+      }
+
+      function drawDots() {
+        if (!ctx) return;
+        const gap = 22 * dpr;
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = "rgba(146, 21, 25, 0.26)";
+        const off = ((scrollOffset * 0.16 * dpr) % gap + gap) % gap;
+        const R = 160 * dpr;
+        const px = pointer.x * dpr;
+        const py = pointer.y * dpr;
+        for (let gy = -gap; gy < H + gap; gy += gap) {
+          const yy = gy + off;
+          for (let gx = 0; gx < W + gap; gx += gap) {
+            let r = 1.7 * dpr;
+            let ox = 0, oy = 0;
+            const dx = gx - px;
+            const dy = yy - py;
+            const d = Math.hypot(dx, dy);
+            if (d < R) {
+              const f = 1 - d / R;
+              r += f * f * 3.4 * dpr;
+              const push = f * f * 18 * dpr;
+              const dd = d || 1;
+              ox = (dx / dd) * push;
+              oy = (dy / dd) * push;
+            }
+            ctx.beginPath();
+            ctx.arc(gx + ox, yy + oy, r, 0, 6.2832);
+            ctx.fill();
+          }
+        }
+      }
+
+      if (cv && ctx) {
+        sizeCanvas();
+        window.addEventListener("resize", sizeCanvas);
+        window.addEventListener("pointermove", (e) => {
+          pointer.x = e.clientX;
+          pointer.y = e.clientY;
+        });
+      }
+
+      if (reduce) {
+        if (cv && ctx) drawDots();
+      } else {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+        let vel = 0;
+        lenis.on("scroll", (e: any) => {
+          ScrollTrigger.update();
+          scrollOffset = e.scroll || window.scrollY;
+          vel = e.velocity || 0;
+        });
+        gsap.ticker.add((t) => lenis.raf(t * 1000));
+        gsap.ticker.lagSmoothing(0);
+
+        document.querySelectorAll<HTMLElement>('a[href^="#"]').forEach((a) => {
+          a.addEventListener("click", (e) => {
+            const id = a.getAttribute("href") || "";
+            const target = id.length > 1 ? document.querySelector(id) : null;
+            if (target) {
+              e.preventDefault();
+              lenis.scrollTo(target as HTMLElement, { offset: -70 });
+            }
+          });
+        });
+
+        gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
+          gsap.from(el, {
+            opacity: 0,
+            y: 36,
+            duration: 0.95,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 88%" },
+          });
+        });
+
+        initStack(false);
+        document.fonts?.ready.then(() => ScrollTrigger.refresh());
+
+        const track = document.querySelector<HTMLElement>(".marq .track");
+        let mx = 0;
+        let half = 0;
+        if (track) {
+          track.style.animation = "none";
+          const measure = () => (half = track.scrollWidth / 2);
+          measure();
+          window.addEventListener("resize", measure);
+        }
+
+        const curDot = document.getElementById("cur-dot");
+        let dxp = window.innerWidth / 2;
+        let dyp = window.innerHeight / 2;
+        if (fine && curDot) {
+          document.documentElement.classList.add("has-cursor");
+          const interactive = "a,button,[data-tilt],[data-cursor],.row,.ev,.filt,.copy";
+          document.addEventListener("pointerover", (e) => {
+            if ((e.target as HTMLElement).closest(interactive)) curDot.classList.add("is-active");
+          });
+          document.addEventListener("pointerout", (e) => {
+            const t = (e.target as HTMLElement).closest(interactive);
+            if (t && !(e.relatedTarget as HTMLElement)?.closest(interactive)) curDot.classList.remove("is-active");
+          });
+        }
+
+        document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((el) => {
+          el.addEventListener("pointermove", (e) => {
+            const r = el.getBoundingClientRect();
+            const rx = (e.clientX - r.left) / r.width - 0.5;
+            const ry = (e.clientY - r.top) / r.height - 0.5;
+            el.style.transform = `rotateX(${-ry * 11}deg) rotateY(${rx * 13}deg)`;
+          });
+          el.addEventListener("pointerleave", () => {
+            el.style.transform = "";
+          });
+        });
+
+        document.querySelectorAll<HTMLElement>(".btn, .join-btn, .faq-cta").forEach((el) => {
+          el.addEventListener("pointermove", (e) => {
+            const r = el.getBoundingClientRect();
+            const dx = e.clientX - (r.left + r.width / 2);
+            const dy = e.clientY - (r.top + r.height / 2);
+            el.style.transform = `translate(${dx * 0.28}px, ${dy * 0.34 - 3}px)`;
+          });
+          el.addEventListener("pointerleave", () => {
+            el.style.transform = "";
+          });
+        });
+
+        const countEls = document.querySelectorAll<HTMLElement>("[data-count]");
+        const countObs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((en) => {
+              if (!en.isIntersecting) return;
+              const el = en.target as HTMLElement;
+              countObs.unobserve(el);
+              const raw = el.getAttribute("data-count") || "";
+              const m = raw.match(/^(\d+)(.*)$/);
+              if (!m) return;
+              const target = +m[1];
+              const suffix = m[2];
+              const dur = 1500;
+              let start: number | null = null;
+              const step = (ts: number) => {
+                if (start === null) start = ts;
+                const p = Math.min(1, (ts - start) / dur);
+                const v = Math.round(target * (1 - Math.pow(1 - p, 4)));
+                el.textContent = String(v) + suffix;
+                if (p < 1) requestAnimationFrame(step);
+              };
+              requestAnimationFrame(step);
+            });
+          },
+          { threshold: 0.4 }
+        );
+        countEls.forEach((el) => countObs.observe(el));
+
+        let last = performance.now();
+        function loop(now: number) {
+          const dt = Math.min(0.05, (now - last) / 1000);
+          last = now;
+          drawDots();
+          if (curDot) {
+            dxp += (pointer.x - dxp) * 0.45;
+            dyp += (pointer.y - dyp) * 0.45;
+            curDot.style.transform = `translate(${dxp}px, ${dyp}px)`;
+          }
+          if (track && half) {
+            mx -= (58 + Math.abs(vel) * 7) * dt;
+            if (-mx >= half) mx += half;
+            const sk = Math.max(-7, Math.min(7, vel * 0.4));
+            track.style.transform = `translateX(${mx}px) skewX(${sk}deg)`;
+          }
+          requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+      }
+    </script>
+  </body>
+</html>

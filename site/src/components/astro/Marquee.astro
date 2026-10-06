@@ -1,0 +1,46 @@
+---
+const items = ["Beach cleanups", "Food drives", "Tutoring", "Trick-or-Treat for UNICEF", "Fall Rally", "Tree planting", "School spirit"];
+const row = [...items, ...items];
+---
+
+<div class="marq" aria-hidden="true" data-stack>
+  <div class="track">
+    {row.map((t) => <span>{t}<i></i></span>)}
+  </div>
+</div>
+
+<style>
+  .marq {
+    overflow: hidden;
+    padding-block: 18px;
+    background: var(--ink);
+    color: var(--paper);
+    border-block: 2px solid var(--ink);
+  }
+  .track {
+    display: flex;
+    width: max-content;
+    animation: slide 38s linear infinite;
+  }
+  .marq span {
+    display: inline-flex;
+    align-items: center;
+    gap: 40px;
+    padding-inline: 28px;
+    white-space: nowrap;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: var(--step-2);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  .marq span:nth-child(even) { color: var(--maroon-br); font-style: italic; }
+  .marq i {
+    width: 10px;
+    height: 10px;
+    background: var(--maroon);
+    rotate: 45deg;
+  }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; } }
+</style>

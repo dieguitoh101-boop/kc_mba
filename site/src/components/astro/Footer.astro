@@ -1,0 +1,107 @@
+---
+import { club, nav, family } from "../../data/site";
+const year = new Date().getFullYear();
+---
+
+<footer class="footer dark-tex" data-stack>
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fintro">
+        <div class="fseals">
+          <img src="/img/crest-mba.png" alt="Mater Brickell Academy crest" />
+          <img src="/img/seal-keyclub.png" alt="Key Club International seal" />
+        </div>
+        <p class="fbig">Caring is our <em>way of life.</em></p>
+        <p>The Key Club at {club.school}. Part of Key Club International and the Florida District. Go {club.mascot}.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+        <a href="#about">About</a>
+      </div>
+      <div>
+        <h4>Family</h4>
+        {family.map((f) => <a href={f.url} target="_blank" rel="noopener">{f.name}</a>)}
+      </div>
+    </div>
+    <div class="wordmark" aria-hidden="true">Key <em>Club</em></div>
+    <div class="legal">
+      <span>&copy; {year} {club.school} Key Club</span>
+      <span>{club.instagram} &middot; {club.address}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    color: var(--paper);
+    border-top: 2px solid var(--gold);
+  }
+  .fgrid {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr 1fr;
+    gap: 30px;
+    padding-block: clamp(56px, 7vw, 80px) 36px;
+  }
+  .fbig {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: var(--step-2);
+    line-height: 1.02;
+    margin-bottom: 18px;
+  }
+  .fbig em { font-style: italic; color: var(--gold); }
+  .fintro p { color: var(--paper-3); max-width: 42ch; }
+  .fseals { display: flex; gap: 12px; margin-bottom: 22px; }
+  .fseals img {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(241, 232, 216, 0.5);
+  }
+  .fseals img:first-child { background: var(--navy); }
+  .fseals img:last-child { background: #fff; }
+  .fgrid h4 {
+    font-family: var(--display);
+    font-size: var(--step--2);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .fgrid a {
+    display: block;
+    color: var(--paper-3);
+    padding: 5px 0;
+    font-weight: 600;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .fgrid a:hover { color: var(--paper); transform: translateX(4px); }
+  .wordmark {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(70px, 18vw, 280px);
+    line-height: 0.78;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    color: color-mix(in srgb, var(--paper) 14%, transparent);
+    padding-block: 10px;
+  }
+  .wordmark em { font-style: italic; color: color-mix(in srgb, var(--maroon-br) 55%, transparent); }
+  .legal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-top: 1.5px solid color-mix(in srgb, var(--paper) 18%, transparent);
+    padding-block: 22px;
+    font-size: var(--step--1);
+    color: var(--paper-3);
+  }
+  @media (max-width: 760px) {
+    .fgrid { grid-template-columns: 1fr 1fr; }
+    .fintro { grid-column: 1 / -1; }
+  }
+</style>

@@ -1,0 +1,136 @@
+---
+import { causes } from "../../data/site";
+const pics = [
+  "/img/stock-env.jpg",
+  "/img/stock-hunger.jpg",
+  "/img/stock-children.jpg",
+  "/img/stock-education.jpg",
+  "/img/stock-spirit.jpg",
+  "/img/stock-district.jpg",
+];
+const themed = causes.map((c, i) => ({
+  ...c,
+  theme: ["paper", "navy", "maroon", "paper", "navy", "maroon"][i],
+  photo: pics[i],
+}));
+---
+
+<section class="serve chapter--paper chapter--edge" id="serve" data-stack>
+  <div class="wrap">
+    <div class="serve-head reveal">
+      <span class="eyebrow">What we do</span>
+      <h2>Six ways we <em>show up.</em></h2>
+    </div>
+
+    <div class="cause-grid">
+      {themed.map((c) => (
+        <article class={`cause t-${c.theme} reveal`} data-cursor={c.title}>
+          <div class="cause-ph"><img src={c.photo} alt={`Key Club ${c.title.toLowerCase()} work`} loading="lazy" /></div>
+          <div class="cause-body">
+            <span class="cn" aria-hidden="true">{c.n}</span>
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .serve { padding-block: clamp(70px, 10vw, 120px); }
+  .serve-head h2 {
+    font-size: var(--step-3);
+    line-height: 0.96;
+    margin-top: 14px;
+  }
+  .serve-head h2 em { font-style: italic; color: var(--maroon); }
+
+  .cause-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: clamp(22px, 3vw, 40px);
+  }
+  .cause {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border: 2px solid var(--ink);
+    box-shadow: 6px 8px 0 var(--ink);
+    overflow: hidden;
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+  .cause:hover { transform: translate(-2px, -3px); box-shadow: 9px 12px 0 var(--ink); }
+  .cause-ph {
+    border-bottom: 2px solid var(--ink);
+    overflow: hidden;
+  }
+  .cause-ph img {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    filter: grayscale(0.15) contrast(1.05);
+    transition: transform 0.6s var(--ease);
+  }
+  .cause:hover .cause-ph img { transform: scale(1.06); }
+  .cause-body {
+    padding: clamp(18px, 1.8vw, 26px);
+    display: grid;
+    align-content: start;
+    gap: 6px;
+  }
+  .cn {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: var(--step-0);
+    letter-spacing: 0.04em;
+  }
+  .cause h3 { font-size: var(--step-1); font-weight: 800; line-height: 1; margin-top: 2px; }
+  .cause p { margin-top: 6px; font-size: var(--step--1); line-height: 1.4; max-width: 38ch; }
+
+  .t-paper { background-color: var(--paper-2); }
+  .t-paper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: radial-gradient(var(--maroon) 1.2px, transparent 1.5px);
+    background-size: 14px 14px;
+    opacity: 0.2;
+  }
+  .t-paper > * { position: relative; z-index: 1; }
+  .t-paper .cn { color: var(--maroon); }
+
+  .t-navy { background-color: var(--navy); color: var(--paper); }
+  .t-navy::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: radial-gradient(rgba(8, 13, 28, 0.5) 1.5px, transparent 1.8px);
+    background-size: 15px 15px;
+  }
+  .t-navy > * { position: relative; z-index: 1; }
+  .t-navy .cn { color: var(--gold); }
+
+  .t-maroon { background-color: var(--maroon); color: var(--paper); }
+  .t-maroon::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: radial-gradient(rgba(241, 232, 216, 0.12) 1.2px, transparent 1.5px);
+    background-size: 16px 16px;
+  }
+  .t-maroon > * { position: relative; z-index: 1; }
+  .t-maroon .cn { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+
+  @media (max-width: 900px) {
+    .cause-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .cause-grid { grid-template-columns: 1fr; }
+    .serve-cta { flex-direction: column; align-items: flex-start; }
+  }
+</style>

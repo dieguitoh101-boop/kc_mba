@@ -1,0 +1,130 @@
+---
+import { events } from "../../data/site";
+const filters = [
+  { k: "all", label: "All" },
+  { k: "env", label: "Environment" },
+  { k: "com", label: "Community" },
+  { k: "dist", label: "District" },
+];
+---
+
+<section class="events chapter--paper chapter--edge" id="events" data-stack>
+  <div class="wrap">
+    <div class="ev-head reveal">
+      <div>
+        <span class="eyebrow">Save the date</span>
+        <h2>Where you can <em>help next.</em></h2>
+      </div>
+      <div class="filters" role="group" aria-label="Filter events">
+        {filters.map((f, i) => (
+          <button class="filt" type="button" data-f={f.k} aria-pressed={i === 0 ? "true" : "false"}>{f.label}</button>
+        ))}
+      </div>
+    </div>
+    <ol class="ev-list" id="evlist">
+      {events.map((e) => (
+        <li class="ev reveal" data-k={e.kind}>
+          <span class="date"><b>{e.day}</b><small>{e.month}</small></span>
+          <div class="ev-body">
+            <h3>{e.title}</h3>
+            <p>{e.detail}</p>
+          </div>
+          <span class="pill">{e.pill}</span>
+        </li>
+      ))}
+    </ol>
+    <p class="note"><span class="tape">Sample dates</span> Swap in the club's real calendar before sharing.</p>
+  </div>
+</section>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>(".filt");
+  const rows = document.querySelectorAll<HTMLLIElement>("#evlist .ev");
+  btns.forEach((b) =>
+    b.addEventListener("click", () => {
+      const f = b.dataset.f;
+      btns.forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+      rows.forEach((r) => {
+        r.hidden = !(f === "all" || r.dataset.k === f);
+      });
+    })
+  );
+</script>
+
+<style>
+  .events { padding-block: clamp(70px, 10vw, 120px); }
+  .ev-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+  .ev-head h2 {
+    font-size: var(--step-3);
+    line-height: 0.96;
+    margin-top: 16px;
+  }
+  .ev-head h2 em { font-style: italic; color: var(--maroon); }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filt {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: var(--step--1);
+    padding: 10px 18px;
+    border: 2px solid var(--ink);
+    background: transparent;
+    transition: background 0.2s, color 0.2s;
+  }
+  .filt[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .ev-list {
+    margin-top: clamp(30px, 4vw, 48px);
+    border-top: 2px solid var(--ink);
+  }
+  .ev {
+    display: grid;
+    grid-template-columns: 96px 1fr auto;
+    gap: 24px;
+    align-items: center;
+    padding: 24px 8px;
+    border-bottom: 1.5px solid var(--line);
+  }
+  .date {
+    display: grid;
+    justify-items: start;
+    line-height: 0.9;
+  }
+  .date b {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: var(--step-3);
+    letter-spacing: -0.02em;
+  }
+  .date small {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: var(--step--2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--maroon);
+    margin-top: 6px;
+  }
+  .ev-body h3 { font-size: var(--step-1); font-weight: 800; line-height: 1.05; }
+  .ev-body p { color: var(--ink-soft); font-size: var(--step--1); margin-top: 6px; }
+  .pill {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: var(--step--1);
+    padding: 8px 14px;
+    background: var(--paper-2);
+    border: 1.5px solid var(--ink);
+    white-space: nowrap;
+  }
+  .note { margin-top: 20px; font-size: var(--step--1); color: var(--mut); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  @media (max-width: 680px) {
+    .ev { grid-template-columns: 64px 1fr; gap: 6px 16px; }
+    .date { grid-row: span 2; }
+    .date b { font-size: var(--step-2); }
+    .pill { grid-column: 2; justify-self: start; }
+  }
+</style>
