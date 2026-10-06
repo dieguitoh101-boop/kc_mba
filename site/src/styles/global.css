@@ -26,7 +26,7 @@ body{
   background:
     radial-gradient(40% 48% at 14% 22%, rgba(146,21,25,.14), transparent 70%),
     radial-gradient(46% 54% at 88% 82%, rgba(198,162,74,.22), transparent 70%);
-  filter:blur(14px);
+  will-change:transform;
   animation:tex-drift 20s ease-in-out infinite;
 }
 .chapter--paper > :not(.stack-shade){position:relative;z-index:1}
@@ -63,9 +63,9 @@ body{
   z-index:0;
   pointer-events:none;
   background:
-    radial-gradient(38% 48% at 18% 28%, rgba(198,162,74,.16), transparent 70%),
-    radial-gradient(44% 52% at 84% 76%, rgba(192,10,45,.18), transparent 70%);
-  filter:blur(12px);
+    radial-gradient(38% 48% at 18% 28%, rgba(198,162,74,.18), transparent 70%),
+    radial-gradient(44% 52% at 84% 76%, rgba(192,10,45,.2), transparent 70%);
+  will-change:transform;
   animation:tex-drift 20s ease-in-out infinite;
 }
 .dark-tex > *{position:relative;z-index:1}
@@ -78,8 +78,7 @@ body{
   inset:0;
   z-index:9990;
   pointer-events:none;
-  opacity:.16;
-  mix-blend-mode:multiply;
+  opacity:.05;
   background-image:url("/img/grain.svg");
   background-size:180px 180px;
 }
