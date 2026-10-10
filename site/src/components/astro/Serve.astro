@@ -1,38 +1,47 @@
 ---
 import { causes } from "../../data/site";
-const pics = [
-  "/img/stock-env.jpg",
-  "/img/stock-hunger.jpg",
-  "/img/stock-children.jpg",
-  "/img/stock-education.jpg",
-  "/img/stock-spirit.jpg",
-  "/img/stock-district.jpg",
+const features = [
+  { ...causes[0], photo: "/img/stock-env.jpg", cls: "ft1" },
+  { ...causes[1], photo: "/img/stock-hunger.jpg", cls: "ft2" },
 ];
-const themed = causes.map((c, i) => ({
-  ...c,
-  theme: ["paper", "navy", "maroon", "paper", "navy", "maroon"][i],
-  photo: pics[i],
-}));
+const rest = causes.slice(2);
 ---
 
 <section class="serve chapter--paper chapter--edge" id="serve" data-stack>
   <div class="wrap">
     <div class="serve-head reveal">
       <span class="eyebrow">What we do</span>
-      <h2>Six ways we <em>show up.</em></h2>
+      <h2>Six ways we show up.</h2>
     </div>
 
-    <div class="cause-grid">
-      {themed.map((c) => (
-        <article class={`cause t-${c.theme} reveal`} data-cursor={c.title}>
-          <div class="cause-ph"><img src={c.photo} alt={`Key Club ${c.title.toLowerCase()} work`} loading="lazy" /></div>
-          <div class="cause-body">
-            <span class="cn" aria-hidden="true">{c.n}</span>
-            <h3>{c.title}</h3>
-            <p>{c.body}</p>
-          </div>
-        </article>
-      ))}
+    <div class="spread">
+      <div class="features">
+        {features.map((c) => (
+          <figure class={`feat ${c.cls} reveal`} data-tilt data-cursor={c.title}>
+            <img src={c.photo} alt={`Key Club ${c.title.toLowerCase()} work`} loading="lazy" />
+            <figcaption>
+              <span class="cn">{c.n}</span>
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div class="also reveal">
+        <span class="tape">Also on the list</span>
+        <ol>
+          {rest.map((c) => (
+            <li>
+              <span class="cn">{c.n}</span>
+              <div>
+                <h3>{c.title}</h3>
+                <p>{c.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   </div>
 </section>
@@ -44,93 +53,81 @@ const themed = causes.map((c, i) => ({
     line-height: 0.96;
     margin-top: 14px;
   }
-  .serve-head h2 em { font-style: italic; color: var(--maroon); }
 
-  .cause-grid {
+  .spread {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-top: clamp(22px, 3vw, 40px);
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+    margin-top: clamp(28px, 4vw, 52px);
   }
-  .cause {
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(18px, 2.4vw, 32px);
+    perspective: 1000px;
+  }
+  .feat {
     position: relative;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    border: 2px solid var(--ink);
-    box-shadow: 6px 8px 0 var(--ink);
-    overflow: hidden;
-    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    margin: 0;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 10px 10px 18px;
+    box-shadow: 8px 10px 0 var(--ink);
+    transform-style: preserve-3d;
+    transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
   }
-  .cause:hover { transform: translate(-2px, -3px); box-shadow: 9px 12px 0 var(--ink); }
-  .cause-ph {
-    border-bottom: 2px solid var(--ink);
-    overflow: hidden;
+  .feat::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    width: 96px;
+    height: 28px;
+    translate: -50% 0;
+    rotate: -3deg;
+    background: color-mix(in srgb, var(--paper-3) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+    z-index: 2;
   }
-  .cause-ph img {
+  .ft1 { rotate: -2deg; }
+  .ft2 { rotate: 2.4deg; margin-top: clamp(28px, 5vw, 70px); }
+  .ft2::before { rotate: 4deg; left: 38%; }
+  .feat img {
     width: 100%;
-    aspect-ratio: 2 / 1;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
     filter: grayscale(0.15) contrast(1.05);
-    transition: transform 0.6s var(--ease);
   }
-  .cause:hover .cause-ph img { transform: scale(1.06); }
-  .cause-body {
-    padding: clamp(18px, 1.8vw, 26px);
-    display: grid;
-    align-content: start;
-    gap: 6px;
-  }
+  .feat figcaption { padding: 14px 4px 0; }
   .cn {
     font-family: var(--display);
     font-weight: 800;
-    font-size: var(--step-0);
-    letter-spacing: 0.04em;
+    font-size: var(--step--1);
+    letter-spacing: 0.06em;
+    color: var(--maroon);
   }
-  .cause h3 { font-size: var(--step-1); font-weight: 800; line-height: 1; margin-top: 2px; }
-  .cause p { margin-top: 6px; font-size: var(--step--1); line-height: 1.4; max-width: 38ch; }
+  .feat h3 { font-size: var(--step-1); font-weight: 800; line-height: 1; margin-top: 4px; }
+  .feat p { margin-top: 8px; font-size: var(--step--1); line-height: 1.4; color: var(--ink-soft); }
 
-  .t-paper { background-color: var(--paper-2); }
-  .t-paper::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-image: radial-gradient(var(--maroon) 1.2px, transparent 1.5px);
-    background-size: 14px 14px;
-    opacity: 0.2;
+  .also .tape { display: inline-block; rotate: -1.5deg; background: var(--paper); }
+  .also ol { margin-top: 18px; border-top: 2px solid var(--ink); }
+  .also li {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    padding-block: 18px;
+    border-bottom: 1.5px solid color-mix(in srgb, var(--ink) 30%, transparent);
   }
-  .t-paper > * { position: relative; z-index: 1; }
-  .t-paper .cn { color: var(--maroon); }
-
-  .t-navy { background-color: var(--navy); color: var(--paper); }
-  .t-navy::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-image: radial-gradient(rgba(8, 13, 28, 0.5) 1.5px, transparent 1.8px);
-    background-size: 15px 15px;
-  }
-  .t-navy > * { position: relative; z-index: 1; }
-  .t-navy .cn { color: var(--gold); }
-
-  .t-maroon { background-color: var(--maroon); color: var(--paper); }
-  .t-maroon::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-image: radial-gradient(rgba(241, 232, 216, 0.12) 1.2px, transparent 1.5px);
-    background-size: 16px 16px;
-  }
-  .t-maroon > * { position: relative; z-index: 1; }
-  .t-maroon .cn { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+  .also li .cn { font-size: var(--step-1); line-height: 1; }
+  .also h3 { font-size: var(--step-0); font-weight: 800; line-height: 1.1; }
+  .also p { margin-top: 4px; font-size: var(--step--1); line-height: 1.4; color: var(--ink-soft); max-width: 40ch; }
 
   @media (max-width: 900px) {
-    .cause-grid { grid-template-columns: 1fr 1fr; }
+    .spread { grid-template-columns: 1fr; }
   }
-  @media (max-width: 560px) {
-    .cause-grid { grid-template-columns: 1fr; }
-    .serve-cta { flex-direction: column; align-items: flex-start; }
+  @media (max-width: 520px) {
+    .features { grid-template-columns: 1fr; }
+    .ft2 { margin-top: 10px; }
   }
 </style>

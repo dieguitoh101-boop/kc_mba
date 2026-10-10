@@ -7,6 +7,17 @@ export const club = {
   instagram: "@mba_keyclub",
   mascot: "Bulls",
   goalHours: 2000,
+  email: "[club email]",
+  meetingTime: "[Meeting day & time]",
+  meetingRoom: "[Room]",
+  advisor: "[Advisor name]",
+  advisorRoom: "[Room]",
+};
+
+export const quote = {
+  text: "[A short line from our club president goes here.]",
+  name: "[President name]",
+  role: "Club President",
 };
 
 export const nav = [
@@ -26,10 +37,10 @@ export const causes = [
 ];
 
 export const stats = [
-  { value: "1925", label: "the year the first Key Club was founded" },
-  { value: "45", label: "countries with Key Clubs today" },
-  { value: "22k+", label: "members in the Florida District" },
-  { value: "42", label: "divisions across Florida and the Caribbean" },
+  { value: "XX", label: "members this year" },
+  { value: "XXX", label: "service hours logged so far" },
+  { value: "XX", label: "service events this year" },
+  { value: "XX", label: "local partners we serve" },
 ];
 
 export const events = [

@@ -1,5 +1,5 @@
 ---
-import { photos } from "../../data/site";
+import { photos, quote } from "../../data/site";
 const checks = [
   "Open to every student in grades 9 to 12",
   "Service hours that count toward Bright Futures",
@@ -11,7 +11,7 @@ const checks = [
   <div class="wrap intro-grid">
     <div class="intro-copy reveal">
       <span class="eyebrow">Who we are</span>
-      <h2>Small acts, <em>big</em> impact on the 305.</h2>
+      <h2>Small acts, big impact on the 305.</h2>
       <p class="intro-lead">
         Key Club is the oldest and largest service program for high school students in
         the world. At Mater Brickell, it is where students who want to make a difference
@@ -20,6 +20,10 @@ const checks = [
       <ul class="checks">
         {checks.map((c) => <li>{c}</li>)}
       </ul>
+      <blockquote class="note-card">
+        <p>{quote.text}</p>
+        <footer>{quote.name}, {quote.role}</footer>
+      </blockquote>
     </div>
 
     <div class="collage reveal">
@@ -60,7 +64,6 @@ const checks = [
     line-height: 0.95;
     margin-top: 16px;
   }
-  .intro-copy h2 em { font-style: italic; color: var(--maroon); }
   .intro-lead {
     font-size: var(--step-1);
     line-height: 1.4;
@@ -83,6 +86,40 @@ const checks = [
     margin-top: 2px;
     background: var(--maroon);
     clip-path: polygon(14% 44%, 0 58%, 42% 100%, 100% 16%, 86% 2%, 42% 72%);
+  }
+
+  .note-card {
+    position: relative;
+    margin: 40px 0 0 6px;
+    max-width: 380px;
+    padding: 26px 24px 20px;
+    background: #fbf6e9;
+    border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    box-shadow: 4px 6px 0 color-mix(in srgb, var(--ink) 22%, transparent);
+    rotate: -1.6deg;
+  }
+  .note-card::before {
+    content: "";
+    position: absolute;
+    top: -13px;
+    left: 30px;
+    width: 88px;
+    height: 26px;
+    rotate: -5deg;
+    background: color-mix(in srgb, var(--paper-3) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+  .note-card p {
+    font-family: "Permanent Marker", var(--display);
+    font-size: var(--step-1);
+    line-height: 1.25;
+    color: var(--navy);
+  }
+  .note-card footer {
+    margin-top: 12px;
+    font-family: "Permanent Marker", var(--display);
+    font-size: var(--step--1);
+    color: var(--maroon);
   }
 
   .collage {

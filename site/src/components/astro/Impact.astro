@@ -7,7 +7,7 @@ const data = stats.map((s, i) => ({ ...s, fill: fills[i] }));
 <section class="impact dark-tex" id="impact" data-stack>
   <div class="wrap">
     <span class="eyebrow light">By the numbers</span>
-    <h2>Part of something <em>much bigger.</em></h2>
+    <h2>Our year so far.</h2>
     <div class="nums" id="nums">
       {data.map((s) => (
         <div class="tile">
@@ -70,7 +70,6 @@ const data = stats.map((s, i) => ({ ...s, fill: fills[i] }));
     max-width: 16ch;
     margin-top: 16px;
   }
-  .impact h2 em { font-style: italic; color: var(--gold); }
   .nums {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
