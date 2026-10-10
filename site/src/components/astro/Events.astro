@@ -1,11 +1,5 @@
 ---
 import { events } from "../../data/site";
-const filters = [
-  { k: "all", label: "All" },
-  { k: "env", label: "Environment" },
-  { k: "com", label: "Community" },
-  { k: "dist", label: "District" },
-];
 ---
 
 <section class="events chapter--paper chapter--edge" id="events" data-stack>
@@ -15,15 +9,10 @@ const filters = [
         <span class="eyebrow">Save the date</span>
         <h2>Where you can help next.</h2>
       </div>
-      <div class="filters" role="group" aria-label="Filter events">
-        {filters.map((f, i) => (
-          <button class="filt" type="button" data-f={f.k} aria-pressed={i === 0 ? "true" : "false"}>{f.label}</button>
-        ))}
-      </div>
     </div>
-    <ol class="ev-list" id="evlist">
+    <ol class="ev-list">
       {events.map((e) => (
-        <li class="ev reveal" data-k={e.kind}>
+        <li class="ev reveal">
           <span class="date"><b>{e.day}</b><small>{e.month}</small></span>
           <div class="ev-body">
             <h3>{e.title}</h3>
@@ -36,20 +25,6 @@ const filters = [
     <p class="note"><span class="tape">Sample dates</span> Swap in the club's real calendar before sharing.</p>
   </div>
 </section>
-
-<script>
-  const btns = document.querySelectorAll<HTMLButtonElement>(".filt");
-  const rows = document.querySelectorAll<HTMLLIElement>("#evlist .ev");
-  btns.forEach((b) =>
-    b.addEventListener("click", () => {
-      const f = b.dataset.f;
-      btns.forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
-      rows.forEach((r) => {
-        r.hidden = !(f === "all" || r.dataset.k === f);
-      });
-    })
-  );
-</script>
 
 <style>
   .events { padding-block: clamp(70px, 10vw, 120px); }
@@ -65,17 +40,6 @@ const filters = [
     line-height: 0.96;
     margin-top: 16px;
   }
-  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
-  .filt {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: var(--step--1);
-    padding: 10px 18px;
-    border: 2px solid var(--ink);
-    background: transparent;
-    transition: background 0.2s, color 0.2s;
-  }
-  .filt[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
   .ev-list {
     margin-top: clamp(30px, 4vw, 48px);
     border-top: 2px solid var(--ink);

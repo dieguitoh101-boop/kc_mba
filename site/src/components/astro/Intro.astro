@@ -10,7 +10,6 @@ const checks = [
 <section class="intro chapter--paper chapter--edge" id="about" data-stack>
   <div class="wrap intro-grid">
     <div class="intro-copy reveal">
-      <span class="eyebrow">Who we are</span>
       <h2>Small acts, big impact on the 305.</h2>
       <p class="intro-lead">
         Key Club is the oldest and largest service program for high school students in
@@ -62,7 +61,7 @@ const checks = [
   .intro-copy h2 {
     font-size: var(--step-3);
     line-height: 0.95;
-    margin-top: 16px;
+    margin-top: 0;
   }
   .intro-lead {
     font-size: var(--step-1);
@@ -164,10 +163,8 @@ const checks = [
     top: -6%;
     width: clamp(78px, 11vw, 112px);
     z-index: 3;
-    animation: spin 22s linear infinite;
+    rotate: -14deg;
   }
-  @keyframes spin { to { rotate: 360deg; } }
-  @media (prefers-reduced-motion: reduce) { .stamp { animation: none; } }
 
   @media (max-width: 860px) {
     .intro-grid { grid-template-columns: 1fr; }

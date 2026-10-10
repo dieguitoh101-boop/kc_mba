@@ -13,7 +13,6 @@ export function initStack(reduce: boolean) {
   if (reduce || units.length < 2) return () => {};
 
   const made: ScrollTrigger[] = [];
-  const shades: HTMLElement[] = [];
   const held: HTMLElement[] = [];
   const vh = window.innerHeight;
 
@@ -27,15 +26,6 @@ export function initStack(reduce: boolean) {
       held.push(next);
     }
 
-    const shade = document.createElement("div");
-    shade.className = "stack-shade";
-    unit.appendChild(shade);
-    shades.push(shade);
-
-    const tl = gsap.timeline({ defaults: { ease: "none" } });
-    if (fills) tl.to({}, { duration: HOLD });
-    tl.fromTo(shade, { opacity: 0 }, { opacity: 0.5, duration: 1 });
-
     made.push(
       ScrollTrigger.create({
         trigger: unit,
@@ -44,8 +34,6 @@ export function initStack(reduce: boolean) {
         end: "top top",
         pin: true,
         pinSpacing: false,
-        scrub: true,
-        animation: tl,
         invalidateOnRefresh: true,
       }),
     );
@@ -55,11 +43,7 @@ export function initStack(reduce: boolean) {
   ScrollTrigger.refresh();
 
   return () => {
-    made.forEach((st) => {
-      st.animation?.kill();
-      st.kill(true);
-    });
-    shades.forEach((shade) => shade.remove());
+    made.forEach((st) => st.kill(true));
     held.forEach((el) => (el.style.marginTop = ""));
   };
 }
